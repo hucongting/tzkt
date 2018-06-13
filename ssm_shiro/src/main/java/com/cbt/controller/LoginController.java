@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cbt.entity.User;
 
+/**
+ *shiro登陆验证
+ *
+*/
 @Controller
 @RequestMapping("/login")
 public class LoginController {
