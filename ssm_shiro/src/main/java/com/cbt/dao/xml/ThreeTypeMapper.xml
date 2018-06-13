@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cbt.dao.ThreeTypeMapper">
+	<resultMap id="CourseTypeResultMap" type="com.cbt.entity.ThreeType">
+		<id column="threetp_id" property="threetp_id" />
+		<result column="threetp_name" property="threetp_name" />
+		<result column="threetp_desc" property="threetp_desc" />
+	</resultMap>
+	
+	<select id="SelCourseThreeTypeList" resultMap="CourseTypeResultMap">
+		select 
+			*
+		from 
+			threetype 
+	</select>
+</mapper>

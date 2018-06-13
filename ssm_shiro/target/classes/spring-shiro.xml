@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+        <!-- 1. 配置CacheManager -->
+       <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+       	<property name="cacheManagerConfigFile" value="classpath:shiro/ehcache-shiro.xml" />
+       </bean>
+
+		<!-- 认证策略 -->
+		<bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+			<property name="authenticationStrategy">
+				<bean class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy" />
+			</property>
+		</bean>
+		
+        <!-- 2. 配置 Shiro 的 SecurityManager 安全管理器 -->
+        <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        	<property name="cacheManager" ref="cacheManager"></property>
+        	<property name="authenticator" ref="authenticator"></property>
+        	<property name="realms">
+				<list>
+					<ref bean="myRealm" />
+					<ref bean="sha1Realm" />
+				</list>
+			</property>
+        </bean>
+        
+        <!-- 3. 配置Realm -->
+        <bean id="myRealm" class="com.cbt.shiro.realm.MyRealm">
+       		 <!-- 密码匹配器 -->
+        	<property name="credentialsMatcher">
+        		<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        			<property name="hashAlgorithmName" value="Md5" /> <!-- 加密算法 -->
+        			<property name="hashIterations" value="1024" /><!-- 加密次数 -->
+        		</bean>
+        	</property>
+        </bean>
+         <!--  配置Sha1Realm -->
+        <bean id="sha1Realm" class="com.cbt.shiro.realm.Sha1Realm">
+       		 <!-- 密码匹配器 -->
+        	<property name="credentialsMatcher">
+        		<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        			<property name="hashAlgorithmName" value="SHA1" /> <!-- 加密算法 -->
+        			<property name="hashIterations" value="1024" /><!-- 加密次数 -->
+        		</bean>
+        	</property>
+        </bean>
+        
+        <!-- 4. 配置 Bean 后置处理器: 可以自动调用配置在Spring IOC容器中shiro bean 的生命周期  -->
+        <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+        
+        <!-- 5. 启用IOC容器中使用shiro注解，但必须在配置了LifecycleBeanPostProcessor 之后才可以使用 -->
+        <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor" />
+        <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        	<property name="securityManager" ref="securityManager"></property>
+        </bean>
+        <!-- 6. 配置ShiroFilter -->
+        <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        	<property name="securityManager" ref="securityManager"></property>
+        	<property name="loginUrl" value="/home/login.jsp" ></property>
+        	<!-- <property name="successUrl" value="/success.jsp"></property> -->
+        	<property name="unauthorizedUrl" value="/home/unauth.jsp"></property>
+        	<property name="filterChainDefinitions">
+        		<value>
+        			/login/logout=logout
+        			/shiro/login=anon
+        			/login/submit=anon
+        			/home/index = anon
+        			/onetype/typelist=anon
+        			/home/css/** = anon
+        			/home/index.jsp = anon
+        			/home/video_desc.jsp = anon
+        			/home/js/** = anon
+        			/home/ico/** = anon
+        			/home/img/** = anon
+        			/admin/css/**=anon
+        			/admin/fonts/**=anon
+        			/admin/images/**=anon
+        			/admin/js/**=anon
+        			/admin/lib/**=anon
+        			/home/admin.jsp = roles[admin]
+        			/home/user.jsp = roles[user]
+        			/**=authc
+        		</value>
+        	</property>
+        </bean>
+</beans>

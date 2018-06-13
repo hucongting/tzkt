@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cbt.dao.OneTypeMapper">
+	<resultMap id="CourseTypeResultMap" type="com.cbt.entity.OneType">
+		<id column="onetp_id" property="onetp_id" />
+		<result column="onetp_name" property="onetp_name" />
+		<result column="onetp_desc" property="onetp_desc" />
+		<collection property="twotplist" ofType="com.cbt.entity.TwoType">
+			<id column="twotp_id" property="twotp_id" />
+			<result column="twotp_name" property="twotp_name" />
+			<result column="twotp_desc" property="twotp_desc" />
+			<result column="onetp_id" property="onetp_id" />
+			<collection property="threetplist" ofType="com.cbt.entity.ThreeType">
+				<id column="threetp_id" property="threetp_id" />
+				<result column="threetp_name" property="threetp_name" />
+				<result column="threetp_desc" property="threetp_desc" />
+				<result column="onetp_id" property="onetp_id" />
+				<result column="twotp_id" property="twotp_id" />
+			</collection> 
+		</collection>
+		
+	</resultMap>
+	
+	<select id="SelCourseTypeList" resultMap="CourseTypeResultMap">
+		select 
+			o.*,
+			t.*,
+			tt.*
+		from 
+			onetype o 
+    	join twotype t 
+    		on o.onetp_id = t.onetp_id
+    	join threetype tt
+    		on tt.onetp_id = o.onetp_id and tt.twotp_id=t.twotp_id
+	</select>
+</mapper>

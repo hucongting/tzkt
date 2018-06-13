@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/mvc    
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+			
+        <context:component-scan base-package="com.cbt.controller" />
+        <!-- 注册MVC注解驱动 -->
+        <mvc:annotation-driven />
+        
+        <!-- 访问静态资源 -->
+        <mvc:resources location="/style/" mapping="/style/**" />
+        <mvc:resources location="/home/css/" mapping="/home/css/**" />
+        <mvc:resources location="/home/js/" mapping="/home/js/**" />
+        <mvc:resources location="/home/ico/" mapping="/home/ico/**" />
+        <mvc:resources location="/home/img/" mapping="/home/img/**" />
+        
+        <mvc:resources location="/admin/css/" mapping="/admin/css/**" />
+        <mvc:resources location="/admin/fonts/" mapping="/admin/fonts/**" />
+        <mvc:resources location="/admin/images/" mapping="/amdin/images/**" />
+        <mvc:resources location="/admin/js/" mapping="/admin/js/**" />
+        <mvc:resources location="/admin/lib/" mapping="/admin/lib/**" />
+        
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        	<property name="prefix" value="/home/"></property>
+        	<property name="suffix" value=".jsp"></property>
+        </bean>
+        
+</beans>
