@@ -7,10 +7,12 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>ssm_shiro Maven Webapp</name>
   <url>http://maven.apache.org</url>
+
   <properties>
   	<spring.version>4.3.8.RELEASE</spring.version>
   	<mybatis.version>3.4.5</mybatis.version>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
